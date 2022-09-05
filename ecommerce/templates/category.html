@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block metadescription %}
+    {% if category %}
+        {{ category.description|truncatewords:155 }}
+    {% else %}
+        welcome to ABC store where you can buys different items...........
+    {% endif %}
+{% endblock %}
+{% block title %}
+ {% if category %}
+        {{ category.name }} -ABC store
+    {% else %}
+       See our new collections -ABC store
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+    {% if category %}
+            <div>
+                <div class="row my_row_class">
+                    <div class="mx_auto">
+                    <p>
+                        <a href="{% url 'shop:allProCat' %}"><b>OUR PRODUCT COLLECTIONS</b></a>
+                    </p>
+                </div>
+                </div>
+            </div>
+    {% endif %}
+    <div class="mx_auto">
+    {% if category %}
+        <img class="my_image" src="{{category.image.url}}" alt="{{category.name}}">
+        </div>
+        <br>
+        <div>
+        <h1 class="text-center my_title">{{category.name}}</h1>
+        <p class="text-justify">{{category.description}}</p>
+         </div>
+    {% else %}
+    <div>
+        <img class="my_image my_image_padding" src="{% static 'img/banner1.png' %}" alt="our products">
+    </div>
+    <br>
+    <div>
+        <h1 class="text-center my_title"><b>OUR PRODUCT COLLECTIONS</b></h1>
+        <p class="text-justify">
+            Over 35 years, ABC Shop has grown leaps and bounds and we owe it all to the loyalty shown by our customers since its inception. With the aim to blend in traditional baking ideas with innovative and creative ones, ABC bakers brings to you heavenly goodies from a vivid range of baked savouries like biscuits, cakes, pizzas and the list goes on. We also take pride in the fact that we are the first bakery in Kerala to use only 100% natural colours and flavours. We go a mile ahead and deliver more than what we promise using our up to date technology, machinery and numerous other resources.
+    </p>
+    </div>
+    {% endif %}
+    <div class="container">
+        <div class="row mx_auto" >
+            {% for product in products.object_list %}
+            <div class="my_bottom_margin col-9 col-sm-12 col-md-4 xol-lg-4">
+                <div class="card text-center" style="width:18em;">
+                    <a href="{{product.get_url}}"><img class="card-ing-top my_image" src="{{ product.image.url}}" alt="{{product.name}}" style="height:300px;"></a>
+                    <div class="card-body">
+                        <h4>{{product.name}}</h4>
+                        <p>{{product.price}}</p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="mx_auto">
+          {% if products.paginator.num_pages > 1 %}
+            <hr>
+            <div class="text-center">
+                {% for pg in products.paginator.page_range %}
+                   <a href="?page={{pg}}" class="btn btn-light btn-sm {% if products.number == pg %} active {% endif %}">{{pg}}</a>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+        <br>
+    </div>
+{% endblock %}
